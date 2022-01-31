@@ -1,6 +1,8 @@
 import 'dart:html';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_web_app/const/assert.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
@@ -83,7 +85,6 @@ class PageTwo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 1.5,
       child: Stack(
         children: [
           Column(
@@ -107,16 +108,131 @@ class PageTwo extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              Container(
-                height: 600,
-                color: Colors.red,
-              )
+              const ProjectWidget(),
+              const SizedBox(height: 50),
             ],
           )
         ],
         // child: Column(
         //   children: [Text('Digital products? Our passion!')],
         // ),
+      ),
+    );
+  }
+}
+
+class ProjectWidget extends StatelessWidget {
+  const ProjectWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * .8,
+      color: Colors.white,
+      padding: const EdgeInsets.only(left: 30, right: 30),
+      child: Container(
+        decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              tileMode: TileMode.mirror,
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                Colors.cyan,
+                Color(0xff17a2b8),
+              ],
+            ),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0xff17a2b8),
+                blurRadius: 4,
+                offset: Offset(4, 8), // Shadow position
+              ),
+            ],
+            color: const Color(0xff17a2b8),
+            borderRadius: BorderRadius.circular(20.0)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 100),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 100, top: 150, right: 0),
+                    child: Expanded(
+                      child: Text(
+                        'A wellness kit on your phone! Already touching lives of over 30k+ users in 75 countries.',
+                        style: GoogleFonts.lato(
+                            fontSize: 30.0, color: Colors.white),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * .4,
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.all(25),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          tileMode: TileMode.mirror,
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [
+                            Color(0xff17a2b8),
+                            Color(0xff17a2b8),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(20.0)),
+                    child: Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'My experiences with Impero has been wonderful in every way. Raza and the team are true professionals in the way they approach every project. They are particularly talented at app development, UX design and understanding the users needs.',
+                            style: GoogleFonts.lato(
+                                fontSize: 20.0, color: Colors.white),
+                            textAlign: TextAlign.start,
+                          ),
+                          const SizedBox(height: 20),
+                          ListTile(
+                            leading: ClipOval(
+                              clipBehavior: Clip.hardEdge,
+                              child: Image.asset(
+                                Assert.logo,
+                              ),
+                            ),
+                            title: Text(
+                              'Aimée-Louise Carton',
+                              style: GoogleFonts.lato(
+                                  color: Colors.white, fontSize: 20.0),
+                            ),
+                            subtitle: Text(
+                              'Co-Founder, KeepAppy',
+                              style: GoogleFonts.lato(
+                                  color: Colors.white, fontSize: 18.0),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Image.asset(
+              Assert.logo,
+              height: MediaQuery.of(context).size.height * .4,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -135,6 +251,7 @@ class PageOne extends StatelessWidget {
     return SizedBox(
       height: MediaQuery.of(context).size.height * .9,
       child: Stack(
+        //alignment: Alignment.bottomCenter,
         children: [
           Opacity(
             opacity: 0.5,
@@ -234,7 +351,51 @@ class PageOne extends StatelessWidget {
                         },
                       ),
                     ],
-                  )
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Image.asset(
+                        Assert.clutch,
+                        fit: BoxFit.cover,
+                        height: 60,
+                      ),
+                      const SizedBox(height: 30),
+                      SizedBox(
+                        height: 60,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            RatingBar.builder(
+                              glow: true,
+                              glowColor: Colors.red,
+                              itemSize: 20,
+                              initialRating: 5,
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: false,
+                              itemCount: 5,
+                              itemPadding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              itemBuilder: (context, _) => Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              onRatingUpdate: (rating) {
+                                print(rating);
+                              },
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: Text('32 Reviews'),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ],
               ),
             ),

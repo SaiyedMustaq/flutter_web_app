@@ -6,4 +6,5 @@ class Assert {
   static String titleImage = '${prefix}title_background.jpeg';
   static String companyLogo = '${prefix}login_page_top_logo.png';
   static String friends = '${prefix}friends.png';
+  static String clutch = '${prefix}clutch.png';
 }
