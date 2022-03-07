@@ -1,10 +1,13 @@
-import 'dart:html';
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_web_app/LargeScreen.dart';
 import 'package:flutter_web_app/const/assert.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 
 void main() {
@@ -41,7 +44,81 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: HomeView(),
+    );
+  }
+}
+
+class HomeView extends StatelessWidget {
+  const HomeView({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+        ),
+        backgroundColor: Colors.white,
+        body: LargeScreen());
+  }
+}
+
+class NavigationBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 100,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          SizedBox(
+            height: 80,
+            width: 150,
+            child: Image.asset('assert/images/logo.jpeg'),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: const <Widget>[
+              _NavBarItem('Episodes'),
+              SizedBox(
+                width: 60,
+              ),
+              _NavBarItem('About'),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _NavBarItem extends StatelessWidget {
+  final String title;
+  const _NavBarItem(
+    this.title, {
+    Key? key,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: const TextStyle(fontSize: 18),
+    );
+  }
+}
+
+class CenteredView extends StatelessWidget {
+  final Widget child;
+  const CenteredView({Key? key, required this.child}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 70.0, vertical: 60),
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 1200),
+        child: child,
+      ),
     );
   }
 }
@@ -108,6 +185,7 @@ class PageTwo extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
+              const SizedBox(height: 50),
               const ProjectWidget(),
               const SizedBox(height: 50),
             ],
@@ -379,7 +457,7 @@ class PageOne extends StatelessWidget {
                               itemCount: 5,
                               itemPadding:
                                   const EdgeInsets.symmetric(horizontal: 4.0),
-                              itemBuilder: (context, _) => Icon(
+                              itemBuilder: (context, _) => const Icon(
                                 Icons.star,
                                 color: Colors.amber,
                               ),
@@ -387,8 +465,8 @@ class PageOne extends StatelessWidget {
                                 print(rating);
                               },
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 8),
                               child: Text('32 Reviews'),
                             )
                           ],
