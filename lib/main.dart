@@ -13,6 +13,7 @@ import 'package:flutter_web_app/LargeScreen.dart';
 import 'package:flutter_web_app/const/assert.dart';
 
 import 'dashboardOne/DashBoardOne.dart';
+import 'dashboardOne/LoginScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const DashBoradOne(),
+      home: const LoginScreen(),
     );
   }
 }

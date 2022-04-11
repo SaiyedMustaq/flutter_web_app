@@ -1,11 +1,17 @@
 import 'dart:developer';
 
+import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_web_app/colors.dart';
+import 'package:flutter_web_app/dashboardOne/DashBoardLeft.dart';
+import 'package:flutter_web_app/dashboardOne/NotificationPage.dart';
+import 'package:flutter_web_app/dashboardOne/TaskPage.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+
+import 'TransctionPage.dart';
 
 const prefixAssert = 'assert/images/';
 
@@ -67,7 +73,17 @@ class DashBoradOne extends StatefulWidget {
   _DashBoradOneState createState() => _DashBoradOneState();
 }
 
-class _DashBoradOneState extends State<DashBoradOne> {
+class _DashBoradOneState extends State<DashBoradOne>
+    with SingleTickerProviderStateMixin {
+  late TabController tabController;
+  int active = 0;
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
   late TooltipBehavior _tooltip;
   List<ValueNotifier<bool>> listValue = [
     ValueNotifier(false),
@@ -217,508 +233,177 @@ class _DashBoradOneState extends State<DashBoradOne> {
     ];
 
     _tooltip = TooltipBehavior(enable: true);
+    tabController = TabController(vsync: this, length: 4, initialIndex: 0)
+      ..addListener(() {
+        setState(() {
+          active = tabController.index;
+        });
+      });
     super.initState();
   }
 
+  PageController page = PageController();
+
   @override
   Widget build(BuildContext context) {
-    final List<ChartData> chartData = [
-      ChartData('David', 25, Colors.red),
-      ChartData('Steve', 38, Colors.yellow),
-      ChartData('Jack', 34, Colors.blueAccent),
-      ChartData('Others', 52, Colors.amber)
-    ];
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                color: Colors.white,
-                width: 200.0,
-                height: MediaQuery.of(context).size.height,
-                child: LeftMenu(
-                    menuItem: menuItem,
-                    listValue: listValue,
-                    menuIcon: menuIcon),
+          SideMenu(
+            controller: page,
+            style: SideMenuStyle(
+              displayMode: SideMenuDisplayMode.auto,
+              hoverColor: Colors.blue[100],
+              selectedColor: Colors.lightBlue,
+              selectedTitleTextStyle: const TextStyle(color: Colors.white),
+              selectedIconColor: Colors.white,
+              // decoration: BoxDecoration(
+              //   borderRadius: BorderRadius.all(Radius.circular(10)),
+              // ),
+              // backgroundColor: Colors.blueGrey[700]
+            ),
+            // title: Column(
+            //   children: [
+            //     // ConstrainedBox(
+            //     //   constraints: BoxConstraints(
+            //     //     maxHeight: 150,
+            //     //     maxWidth: 150,
+            //     //   ),
+            //     //   child: Icon(Icons.menu),
+            //     // ),
+            //     Divider(
+            //       indent: 8.0,
+            //       endIndent: 8.0,
+            //     ),
+            //   ],
+            // ),
+            footer: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'mohada',
+                style: TextStyle(fontSize: 15),
               ),
-              Expanded(
-                child: Container(
-                  color: const Color.fromRGBO(250, 250, 251, 1),
-                  height: MediaQuery.of(context).size.height,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RightTopSearch(),
-                        Container(
-                          padding: const EdgeInsets.only(
-                              top: 20, left: 10, right: 10),
-                          color: appColor.backGroundColor,
-                          height: MediaQuery.of(context).size.height,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const MyFileHeader(),
-                                    Row(
-                                      children: [
-                                        MyFileTile(
-                                          backGroundColor:
-                                              myFileList[0].backgroundColor!,
-                                          iconColor: myFileList[0].iconColor!,
-                                          filesCount:
-                                              "${myFileList[0].fileCount}",
-                                          gb: '${myFileList[0].gb}',
-                                          icon: myFileList[0].icon,
-                                          name: 'Document',
-                                          percentage: 0.2,
-                                        ),
-                                        MyFileTile(
-                                          backGroundColor:
-                                              myFileList[1].backgroundColor!,
-                                          iconColor: myFileList[1].iconColor!,
-                                          filesCount:
-                                              "${myFileList[1].fileCount}",
-                                          gb: '${myFileList[1].gb}',
-                                          icon: myFileList[1].icon,
-                                          name: '${myFileList[1].name}',
-                                          percentage: 0.2,
-                                        ),
-                                        MyFileTile(
-                                          backGroundColor:
-                                              myFileList[2].backgroundColor!,
-                                          iconColor: myFileList[2].iconColor!,
-                                          filesCount:
-                                              "${myFileList[2].fileCount}",
-                                          gb: '${myFileList[2].gb}',
-                                          icon: myFileList[2].icon,
-                                          name: '${myFileList[2].name}',
-                                          percentage: 0.2,
-                                        ),
-                                        MyFileTile(
-                                          backGroundColor:
-                                              myFileList[3].backgroundColor!,
-                                          iconColor: myFileList[3].iconColor!,
-                                          filesCount:
-                                              "${myFileList[3].fileCount}",
-                                          gb: '${myFileList[3].gb}',
-                                          icon: myFileList[3].icon,
-                                          name: '${myFileList[3].name}',
-                                          percentage: 0.2,
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 2,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        12.0)),
-                                            child: Column(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                    left: 10,
-                                                    right: 15,
-                                                    top: 20,
-                                                  ),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      const Text(
-                                                        'Recent File',
-                                                        style: TextStyle(
-                                                          fontSize: 16.0,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(10.0),
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            border: Border.all(
-                                                                color: Colors
-                                                                    .grey
-                                                                    .withOpacity(
-                                                                        0.2))),
-                                                        child: const Text(
-                                                          'See more',
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                DataTable(
-                                                    columns: const [
-                                                      DataColumn(
-                                                        label: Text(
-                                                          "File Name",
-                                                          textScaleFactor: 1,
-                                                        ),
-                                                        numeric: false,
-                                                      ),
-                                                      DataColumn(
-                                                        label: Text(
-                                                          "Date",
-                                                          textScaleFactor: 1,
-                                                        ),
-                                                        numeric: false,
-                                                      ),
-                                                      DataColumn(
-                                                        label: Text(
-                                                          "Size",
-                                                          textScaleFactor: 1,
-                                                        ),
-                                                        numeric: false,
-                                                      ),
-                                                    ],
-                                                    rows: recntfileList
-                                                        .map(
-                                                            (t) => DataRow(
-                                                                    cells: [
-                                                                      DataCell(
-                                                                        Row(
-                                                                          children: [
-                                                                            Container(
-                                                                              height: 40,
-                                                                              width: 40,
-                                                                              padding: const EdgeInsets.all(10.0),
-                                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: t.backGroundColor),
-                                                                              child: Image.asset(
-                                                                                '${t.url}',
-                                                                                color: Colors.white,
-                                                                              ),
-                                                                            ),
-                                                                            const SizedBox(width: 8),
-                                                                            Text(
-                                                                              t.name!,
-                                                                              textScaleFactor: 1,
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      DataCell(
-                                                                          Text(
-                                                                        t.date!,
-                                                                        maxLines:
-                                                                            3,
-                                                                        textScaleFactor:
-                                                                            1,
-                                                                      )),
-                                                                      DataCell(
-                                                                          Text(
-                                                                        t.mb!
-                                                                            .toString(),
-                                                                        textScaleFactor:
-                                                                            1,
-                                                                      )),
-                                                                    ]))
-                                                        .toList())
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Expanded(
-                                          flex: 2,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        12.0)),
-                                            alignment: Alignment.topCenter,
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 20, right: 20),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  const SizedBox(height: 20),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: const [
-                                                      Text("Analytics"),
-                                                      Icon(Icons.more_vert)
-                                                    ],
-                                                  ),
-                                                  const SizedBox(height: 20),
-                                                  Container(
-                                                    height: 390.0,
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Container(
-                                width: 200,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(12.0)),
-                                child: Column(
-                                  children: [
-                                    const Text('Storage details'),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: appColor.secondaryColor,
-                                                width: 2),
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12.0)),
-                                        child: Row(children: [
-                                          const Icon(Icons.usb_rounded),
-                                          Column(
-                                            children: const [
-                                              Text('Dounment Files'),
-                                              Text("1,35000")
-                                            ],
-                                          ),
-                                          const Text("5.2 GB")
-                                        ]),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: appColor.secondaryColor,
-                                                width: 2),
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12.0)),
-                                        child: Row(children: [
-                                          const Icon(Icons.usb_rounded),
-                                          Column(
-                                            children: const [
-                                              Text('Dounment Files'),
-                                              Text("1,10000")
-                                            ],
-                                          ),
-                                          const Text("1.2 GB")
-                                        ]),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: appColor.secondaryColor,
-                                                width: 2),
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12.0)),
-                                        child: Row(children: [
-                                          const Icon(Icons.usb_rounded),
-                                          Column(
-                                            children: const [
-                                              Text('Dounment Files'),
-                                              Text("1,18000")
-                                            ],
-                                          ),
-                                          const Text("1.5 GB")
-                                        ]),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: appColor.secondaryColor,
-                                                width: 2),
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12.0)),
-                                        child: Row(children: [
-                                          const Icon(Icons.usb_rounded),
-                                          Column(
-                                            children: const [
-                                              Text('Dounment Files'),
-                                              Text("1,25000")
-                                            ],
-                                          ),
-                                          const Text("1.5 GB")
-                                        ]),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: appColor.secondaryColor,
-                                                width: 2),
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12.0)),
-                                        child: Row(children: [
-                                          const Icon(Icons.usb_rounded),
-                                          Column(
-                                            children: const [
-                                              Text('Dounment Files'),
-                                              Text("1,32000")
-                                            ],
-                                          ),
-                                          const Text("3.2 GB")
-                                        ]),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+            ),
+            items: [
+              SideMenuItem(
+                priority: 0,
+                title: 'Dashboard',
+                onTap: () {
+                  page.jumpToPage(0);
+                },
+                icon: const Icon(Icons.home),
+                badgeContent: const Text(
+                  '3',
+                  style: TextStyle(color: Colors.white),
                 ),
-              )
+              ),
+              SideMenuItem(
+                priority: 1,
+                title: 'Users',
+                onTap: () {
+                  page.jumpToPage(1);
+                },
+                icon: const Icon(Icons.supervisor_account),
+              ),
+              SideMenuItem(
+                priority: 2,
+                title: 'Files',
+                onTap: () {
+                  page.jumpToPage(2);
+                },
+                icon: const Icon(Icons.file_copy_rounded),
+              ),
+              SideMenuItem(
+                priority: 3,
+                title: 'Download',
+                onTap: () {
+                  page.jumpToPage(3);
+                },
+                icon: const Icon(Icons.download),
+              ),
+              SideMenuItem(
+                priority: 4,
+                title: 'Settings',
+                onTap: () {
+                  page.jumpToPage(4);
+                },
+                icon: const Icon(Icons.settings),
+              ),
+              SideMenuItem(
+                priority: 6,
+                title: 'Exit',
+                onTap: () async {},
+                icon: const Icon(Icons.exit_to_app),
+              ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Container RightTopSearch() {
-    return Container(
-      padding: const EdgeInsets.only(left: 50, right: 50),
-      height: 60,
-      color: const Color.fromRGBO(250, 250, 251, 1),
-      child: Row(
-        children: [
-          const Text(
-            'Documents',
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const Spacer(),
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.0)),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                          hintText: 'Search',
-                          contentPadding: EdgeInsets.only(left: 20),
-                          border: InputBorder.none),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: appColor.primaryColor,
-                        borderRadius: BorderRadius.circular(10.0)),
-                    height: 40,
-                    width: 40,
-                    padding: const EdgeInsets.all(10.0),
-                    child: const Icon(
-                      CupertinoIcons.search,
-                      color: Colors.white,
-                      size: 18.0,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(12.0)),
-              color: Colors.white,
-            ),
-            child: Row(
+            child: PageView(
+              controller: page,
               children: [
+                DashBoardLeft(
+                    myFileList: myFileList, recntfileList: recntfileList),
                 Container(
-                  height: 50,
-                  width: 60,
-                  padding: const EdgeInsets.all(15.0),
-                  child: ClipOval(
-                    child: Image.network(
-                      'https://i.picsum.photos/id/868/200/200.jpg?hmac=TH6VPbfiRO1pMY4ZYWqECwlH8wSnlxN_KlCVOzTpbe8',
-                      height: 60,
-                      width: 60,
+                  color: Colors.white,
+                  child: const Center(
+                    child: Text(
+                      'Users',
+                      style: TextStyle(fontSize: 35),
                     ),
                   ),
                 ),
-                const Text(
-                  "User Name",
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w800,
+                Container(
+                  color: Colors.white,
+                  child: const Center(
+                    child: Text(
+                      'Files',
+                      style: TextStyle(fontSize: 35),
+                    ),
                   ),
                 ),
-                const Icon(Icons.arrow_drop_down)
+                Container(
+                  color: Colors.white,
+                  child: const Center(
+                    child: Text(
+                      'Download',
+                      style: TextStyle(fontSize: 35),
+                    ),
+                  ),
+                ),
+                Container(
+                  color: Colors.white,
+                  child: const Center(
+                    child: Text(
+                      'Settings',
+                      style: TextStyle(fontSize: 35),
+                    ),
+                  ),
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
 }
 
+typedef onIndexClick(int id);
+
 class LeftMenu extends StatelessWidget {
-  const LeftMenu({
+  LeftMenu({
     Key? key,
     required this.menuItem,
     required this.listValue,
     required this.menuIcon,
+    required this.onClick,
   }) : super(key: key);
 
   final List<String> menuItem;
   final List<ValueNotifier<bool>> listValue;
   final List<IconData> menuIcon;
+  onIndexClick onClick;
 
   @override
   Widget build(BuildContext context) {
@@ -748,7 +433,8 @@ class LeftMenu extends StatelessWidget {
                   valueListenable: listValue[index],
                   builder: (context, vlue, child) => InkWell(
                     onTap: () {
-                      log('CLICJK');
+                      onClick(index);
+                      onNavigate(index);
                     },
                     onHover: (val) {
                       listValue[index].value = !listValue[index].value;
@@ -869,6 +555,20 @@ class LeftMenu extends StatelessWidget {
       ],
     );
   }
+
+  void onNavigate(int index) {
+    switch (index) {
+      case 0:
+        break;
+      case 1:
+        break;
+      case 2:
+        break;
+      case 3:
+        break;
+      default:
+    }
+  }
 }
 
 class MyFileTile extends StatelessWidget {
@@ -980,7 +680,7 @@ class MyFileHeader extends StatelessWidget {
           margin: const EdgeInsets.only(right: 20),
           decoration: const BoxDecoration(
               color: appColor.primaryColor,
-              borderRadius: const BorderRadius.all(Radius.circular(10.0))),
+              borderRadius: BorderRadius.all(Radius.circular(10.0))),
           padding:
               const EdgeInsets.only(top: 15, bottom: 15, left: 20, right: 20),
           child: const Text(
