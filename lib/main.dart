@@ -2,13 +2,17 @@
 
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_web_app/LargeScreen.dart';
-import 'package:flutter_web_app/const/assert.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
+
+import 'package:flutter_web_app/LargeScreen.dart';
+import 'package:flutter_web_app/const/assert.dart';
+
+import 'dashboardOne/DashBoardOne.dart';
 
 void main() {
   runApp(const MyApp());
@@ -44,7 +48,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeView(),
+      home: const DashBoradOne(),
     );
   }
 }
@@ -131,6 +135,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  GlobalKey pageKey = GlobalKey();
   bool isHover = false;
   List<ValueNotifier<bool>> middleListHover = [
     ValueNotifier(false),
@@ -145,6 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: [
               PageOne(
+                pageKey: pageKey,
                 middleListHover: middleListHover,
               ),
               const PageTwo(),
@@ -316,14 +322,21 @@ class ProjectWidget extends StatelessWidget {
   }
 }
 
-class PageOne extends StatelessWidget {
-  const PageOne({
+class PageOne extends StatefulWidget {
+  GlobalKey pageKey;
+  PageOne({
     Key? key,
+    required this.pageKey,
     required this.middleListHover,
   }) : super(key: key);
 
   final List<ValueNotifier<bool>> middleListHover;
 
+  @override
+  State<PageOne> createState() => _PageOneState();
+}
+
+class _PageOneState extends State<PageOne> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -340,7 +353,9 @@ class PageOne extends StatelessWidget {
             ),
           ),
           Column(children: [
-            Webtitle(),
+            Webtitle(
+              pageKey: widget.pageKey,
+            ),
             Expanded(child: Container()),
             Expanded(
               flex: 3,
@@ -363,13 +378,13 @@ class PageOne extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ValueListenableBuilder(
-                        valueListenable: middleListHover[0],
+                        valueListenable: widget.middleListHover[0],
                         builder:
                             (BuildContext context, bool value, Widget? child) {
                           return InkWell(
                             onTap: () {},
                             onHover: (val) {
-                              middleListHover[0].value = val;
+                              widget.middleListHover[0].value = val;
                             },
                             child: Container(
                               child: Padding(
@@ -396,13 +411,13 @@ class PageOne extends StatelessWidget {
                         },
                       ),
                       ValueListenableBuilder(
-                        valueListenable: middleListHover[1],
+                        valueListenable: widget.middleListHover[1],
                         builder:
                             (BuildContext context, bool value, Widget? child) {
                           return InkWell(
                             onTap: () {},
                             onHover: (val) {
-                              middleListHover[1].value = val;
+                              widget.middleListHover[1].value = val;
                             },
                             child: Container(
                               child: Padding(
@@ -485,10 +500,20 @@ class PageOne extends StatelessWidget {
 }
 
 // ignore: must_be_immutable
-class Webtitle extends StatelessWidget {
-  Webtitle({Key? key}) : super(key: key);
+class Webtitle extends StatefulWidget {
+  GlobalKey pageKey;
+  Webtitle({
+    Key? key,
+    required this.pageKey,
+  }) : super(key: key);
 
+  @override
+  State<Webtitle> createState() => _WebtitleState();
+}
+
+class _WebtitleState extends State<Webtitle> {
   final ValueNotifier<bool> hover = ValueNotifier(false);
+
   List<ValueNotifier<bool>> hoveList = [
     ValueNotifier(false),
     ValueNotifier(false),
@@ -499,6 +524,27 @@ class Webtitle extends StatelessWidget {
     ValueNotifier(false)
   ];
 
+  openMenu(BuildContext context) async {
+    final render =
+        widget.pageKey.currentContext!.findRenderObject() as RenderBox;
+    await showMenu(
+      context: context,
+      position:
+          RelativeRect.fromLTRB(450, 100, double.infinity, double.infinity),
+      items: const [
+        PopupMenuItem(
+          child: Text("Create a website"),
+        ),
+        PopupMenuItem(
+          child: Text("Top Ms commericial management"),
+        ),
+        PopupMenuItem(
+          child: Text("Mobile inventory application"),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -507,12 +553,12 @@ class Webtitle extends StatelessWidget {
         child: Row(
           children: [
             Image.asset(
-              Assert.friends,
+              Assert.imperoLogo,
               height: 80,
               width: 100,
             ),
             const Text(
-              'Friends',
+              'Impero',
               style: TextStyle(
                   fontSize: 35.0,
                   fontWeight: FontWeight.w700,
@@ -543,7 +589,26 @@ class Webtitle extends StatelessWidget {
               valueListenable: hoveList[1],
               builder: (context, bool value, child) => InkWell(
                 onTap: () {},
+                onTapCancel: () {
+                  if (kDebugMode) {
+                    print('TAP CANCLE');
+                  }
+                },
+                onTapDown: (vale) {
+                  if (kDebugMode) {
+                    print('TAP DOWN');
+                  }
+                },
+                onFocusChange: (value) {
+                  if (kDebugMode) {
+                    print('On Focus Change');
+                  }
+                },
                 onHover: (val) {
+                  if (kDebugMode) {
+                    print('On Hover');
+                  }
+                  openMenu(context);
                   hoveList[1].value = val;
                 },
                 child: MaterialButton(
@@ -651,7 +716,8 @@ class Webtitle extends StatelessWidget {
                   },
                   child: Container(
                     child: Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.only(
+                          left: 10, right: 10, top: 10, bottom: 10),
                       child: Text(
                         'Contact us',
                         style: value
