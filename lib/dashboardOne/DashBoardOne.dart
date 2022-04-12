@@ -247,144 +247,84 @@ class _DashBoradOneState extends State<DashBoradOne>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SideMenu(
-            controller: page,
-            style: SideMenuStyle(
-              displayMode: SideMenuDisplayMode.auto,
-              hoverColor: Colors.blue[100],
-              selectedColor: Colors.lightBlue,
-              selectedTitleTextStyle: const TextStyle(color: Colors.white),
-              selectedIconColor: Colors.white,
-              // decoration: BoxDecoration(
-              //   borderRadius: BorderRadius.all(Radius.circular(10)),
-              // ),
-              // backgroundColor: Colors.blueGrey[700]
+      body: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              width: 200,
+              child: adminMenu(),
             ),
-            // title: Column(
-            //   children: [
-            //     // ConstrainedBox(
-            //     //   constraints: BoxConstraints(
-            //     //     maxHeight: 150,
-            //     //     maxWidth: 150,
-            //     //   ),
-            //     //   child: Icon(Icons.menu),
-            //     // ),
-            //     Divider(
-            //       indent: 8.0,
-            //       endIndent: 8.0,
-            //     ),
-            //   ],
-            // ),
-            footer: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'mohada',
-                style: TextStyle(fontSize: 15),
+            Expanded(
+              child: TabBarView(
+                controller: tabController,
+                children: <Widget>[
+                  Container(
+                    child: Text("Home"),
+                  ),
+                  Container(
+                    child: Text('Add new cneter'),
+                  ),
+                  Container(
+                    child: Text('List Cneter  '),
+                  ),
+                  Container(
+                    child: Text('User'),
+                  ),
+                ],
               ),
             ),
-            items: [
-              SideMenuItem(
-                priority: 0,
-                title: 'Dashboard',
-                onTap: () {
-                  page.jumpToPage(0);
-                },
-                icon: const Icon(Icons.home),
-                badgeContent: const Text(
-                  '3',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              SideMenuItem(
-                priority: 1,
-                title: 'Users',
-                onTap: () {
-                  page.jumpToPage(1);
-                },
-                icon: const Icon(Icons.supervisor_account),
-              ),
-              SideMenuItem(
-                priority: 2,
-                title: 'Files',
-                onTap: () {
-                  page.jumpToPage(2);
-                },
-                icon: const Icon(Icons.file_copy_rounded),
-              ),
-              SideMenuItem(
-                priority: 3,
-                title: 'Download',
-                onTap: () {
-                  page.jumpToPage(3);
-                },
-                icon: const Icon(Icons.download),
-              ),
-              SideMenuItem(
-                priority: 4,
-                title: 'Settings',
-                onTap: () {
-                  page.jumpToPage(4);
-                },
-                icon: const Icon(Icons.settings),
-              ),
-              SideMenuItem(
-                priority: 6,
-                title: 'Exit',
-                onTap: () async {},
-                icon: const Icon(Icons.exit_to_app),
-              ),
-            ],
-          ),
-          Expanded(
-            child: PageView(
-              controller: page,
-              children: [
-                DashBoardLeft(
-                    myFileList: myFileList, recntfileList: recntfileList),
-                Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Users',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Files',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Download',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Settings',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget adminMenu() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        ListTile(
+          leading: Icon(Icons.home),
+          title: Text('Home'),
+          selected: tabController.index == 0 ? true : false,
+          onTap: () {
+            tabController.animateTo(0);
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.add),
+          title: Text('Add New Centre'),
+          selected: tabController.index == 1 ? true : false,
+          onTap: () {
+            tabController.animateTo(1);
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.list),
+          title: Text('List Centres'),
+          selected: tabController.index == 2 ? true : false,
+          onTap: () {
+            tabController.animateTo(2);
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.people),
+          title: Text('Users'),
+          selected: tabController.index == 3 ? true : false,
+          onTap: () {
+            tabController.animateTo(3);
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.exit_to_app),
+          title: Text('Logout'),
+          selected: tabController.index == 4 ? true : false,
+          onTap: () {
+            tabController.animateTo(4);
+          },
+        ),
+      ],
     );
   }
 }
