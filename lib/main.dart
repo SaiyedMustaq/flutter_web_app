@@ -7,14 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_web_app/zebex/zubexLandingPage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 
 import 'package:flutter_web_app/LargeScreen.dart';
 import 'package:flutter_web_app/const/assert.dart';
-
-import 'dashboardOne/DashBoardOne.dart';
-import 'dashboardOne/LoginScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -65,7 +61,7 @@ class HomeView extends StatelessWidget {
           elevation: 0.0,
         ),
         backgroundColor: Colors.white,
-        body: LargeScreen());
+        body: const LargeScreen());
   }
 }
 
